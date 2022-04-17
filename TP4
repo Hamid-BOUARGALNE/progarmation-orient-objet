@@ -1,0 +1,79 @@
+#include<iostream>
+#include <conio.h>
+#include <string.h>
+using namespace std;
+// partie 1:
+ class Note{
+ 	    float value;
+ 		public:
+ 		Note(float note=0){
+ 			value= note;
+		 }
+ 	//	Note (Note &);
+ 		void intput();
+ 		void print();
+ 		void set(float);
+ 		float get();
+ 		string apprecier();
+ };
+ void Note::intput(){
+ 	cout<<"saiser une Note :";
+ 	cin>>value;
+ 	if(value<0||value>20)
+ 	cout<<"\n impossible !! veillez saisir une note entre 0 et 20 .";
+ }
+  void Note::print(){
+ 	cout<<"la Note est :"<< this->value;
+ }
+ void Note::set(float nv){
+ 	value=nv;
+ }
+ float Note::get(){
+ 	return value;
+ }
+ string Note::apprecier(){
+ 	if(0<=this->get()<10)
+     	return "  non valider"; 
+ 	else 
+	     return " valider";
+
+}
+void Harmonise(Note &note){
+ 			if(note.get()<8)
+ 			note.set(0);
+ 			else 
+ 			note.set(8);
+		 }
+ float Moyenne(Note *,int);
+ float Moyenne(Note *note,int t){
+ 	int somme=0;
+ 	for(int i=0;i<t;i++)
+ 	somme+=note[i].get();
+ 	return somme/t;
+ }
+ void Appreciation(Note*,int t);
+ void Appreciation(Note* note,int t){
+ 	for(int i=0;i<t;i++)
+ 	  note[i].apprecier();
+ }
+main(){
+	int n;
+	cout<<"donner le nombre des etudiants:\n";
+	cin>>n;
+	Note* note=new Note[n];
+	for(int i=0;i<n;i++)
+ 	  note[i].intput();
+ 	cout<<"les notes des etudiants:";
+ 	for(int i=0;i<n;i++){
+ 	 cout<<"\n";
+ 	 cout<<"etudiant "<<i+1<<" : ";
+ 	 note[i].print();
+   	cout<<note[i].apprecier();
+ }
+  cout<<"\n la moyenne de la classe est :"<<Moyenne(note,n);
+  for(int i=0;i<n;i++){
+  	if(note[i].get()<15)
+  	Harmonise(note[i]);
+  }
+  cout<<"\n la moyenne de la classe apres l’harmonise est :"<<Moyenne(note,n);
+}
