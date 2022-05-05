@@ -1,0 +1,94 @@
+#include<iostream>
+//#include<conio.h>
+#include<string>
+using namespace std; 
+class Employe {
+	int Matricule,Age;
+	float Salaire;
+	string nom;
+	public:
+		Employe(string,int,int,float);
+		Employe(Employe &); //constrecteur par recopie
+		void toString() ;
+		float GetSalaire();
+		void SetSalaire(float);
+		void AfficherS();
+		int GetAge();
+		void SetAge(int);
+		void AfficherA();
+		~Employe();
+};
+Employe::Employe(string name="",int Mat=0,int age=0,float Sal=0.0 ){
+	this->nom=name;
+	this->Matricule=Mat;
+	this->Age=age;
+	this->Salaire=Sal;
+}
+  Employe::Employe(Employe & Em) {
+ 	this->nom=Em.nom;
+	this->Matricule=Em.Matricule;
+	this->Age=Em.Age;
+	this->Salaire=Em.Salaire;
+ }
+void Employe::toString(){
+  cout<<"le nom : "<<nom<<" Matricule: "<<Matricule<<" age: "<<Age<<" ans "<<" salaire: "<<Salaire<<" dh "<<endl;
+}
+float Employe::GetSalaire(){
+	return this->Salaire;
+}
+void Employe::SetSalaire(float sal){
+	this->Salaire=sal;
+}
+void Employe::AfficherS(){
+	cout<<"le salaire est: "<<Salaire;
+}
+int Employe::GetAge(){
+	return Age;
+}
+void Employe::SetAge(int age){
+	this->Age=age;
+}
+void Employe::AfficherA(){
+	cout<<"age: "<<this->Age;
+}
+Employe::~Employe(){
+}
+class Adherent: public Employe
+{
+	float MontantPr;
+	string Date;
+	public:
+			
+		Adherent(string,int,int,float,string,float);
+		float GetSalaire();
+		void AfficherS();
+		float GetMontant();
+		void SetMontant(float);
+};
+Adherent::Adherent(string name="",int Mat=0,int age=0,float Sal=0.0,string date="",float MnPr=0):Employe(name,Mat,age,Sal){
+	this->MontantPr=MnPr;
+	this->Date=date;
+}
+float Adherent::GetMontant(){
+	return MontantPr;
+}
+void Adherent::SetMontant(float Mn){
+	this->MontantPr=Mn;
+}
+float Adherent::GetSalaire(){
+	float c=Employe::GetSalaire();
+	return c-MontantPr;
+}
+void Adherent::AfficherS(){
+	cout<<"le salaire est: "<<this->GetSalaire();
+}
+main(){
+	Employe Em("brahim",20223,20,2000);
+	Em.toString();
+	Adherent B("ali",20113,20,2000,"12/4/2022",300);
+	B.toString();
+	cout<<"apres assurence: ";B.AfficherS();
+	
+	
+}
+
