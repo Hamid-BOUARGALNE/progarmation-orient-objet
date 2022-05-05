@@ -1,0 +1,313 @@
+#include <iostream>
+#include <conio.h>
+#include <math.h>
+using namespace std;
+//classe de cordonne
+class coordonne
+{
+	private:
+		int x,y;
+	public:
+		coordonne(int a=0,int b=0)
+		{
+			x=a;
+			y=b;
+		}
+		void deplace(int a,int b)
+		{
+			x+=a;
+			y+=b;
+			
+		}
+		void affiche(){
+			cout<<" ( x= "<<x<<", y= "<<y<< ")  ";
+		}
+		int getx(){
+			return x;
+		}
+		int gety(){
+			return y;
+		}
+		
+	friend class cercle;
+	//friend class triangle;
+};
+
+//classe de la forme
+class forme
+{
+	protected:
+		short couleur;
+	public:
+	    forme(short =1);
+		forme(forme &);
+		void affiche();
+		forme operator=(forme &);	
+};
+
+forme::forme(short c){
+	couleur=c;
+}
+forme::forme(forme &v)
+{
+	this->couleur=v.couleur;
+}
+void forme::affiche(){
+	cout <<"la couleur de la forme est : "<<couleur<<endl;
+}
+ forme forme:: operator=(forme &v){
+   this->couleur=v.couleur;	
+   return *this;
+};
+
+
+//*********************************classe cercle***********************************************//
+class cercle :public forme
+{
+  protected:
+      coordonne centre;
+	  short rayon;
+  public:
+      cercle(int,int,short,short);
+	  cercle(cercle &);
+	  cercle operator = (cercle &);
+	  void affiche();
+	  void deplace(int,int);
+	  float surface();
+	  float perimetre();
+	  	  	
+};
+
+
+cercle::cercle(int a,int b,short r,short c):forme(c)
+{
+    //coordonne(a,b);
+    this->centre.x=a;
+    this->centre.y=b;
+	rayon=r;
+}
+
+cercle::cercle(cercle &u):forme(u.couleur)
+{
+	this->centre.x=u.centre.x;
+	this->centre.y=u.centre.y;
+	this->rayon=u.rayon;
+}
+
+cercle cercle::operator =(cercle &v)
+{
+	this->rayon=v.rayon;
+	this->centre.x=v.centre.x;
+	this->centre.y=v.centre.y;
+	this->couleur=v.couleur;
+	return *this;
+	
+
+}
+
+void cercle::affiche(){
+	cout<<" le cercle de centre:";
+	centre.affiche();
+	cout<<" et de rayon "<<rayon<<" ";
+	forme::affiche();
+	
+}
+
+void cercle::deplace(int a,int b){
+	centre.x+=a;
+	centre.y+=b;
+}
+float cercle::perimetre(){
+	return  2*3.14*rayon; 
+}
+float cercle::surface(){
+	return  3.14*rayon*rayon; 
+}
+
+//*************************************classe triangulair******************************************//
+
+class triangle:public forme
+{
+	protected:
+		coordonne a,b,c;
+	public:
+	  triangle(int,int,int,int,int,int,short);
+	  triangle(triangle &);
+	  triangle operator = (triangle &);
+	  void affiche();
+	  void deplace(int ,int);
+	  int surface();
+	  int perimetre();
+};
+triangle::triangle(int a,int b,int c,int d,int e,int f,short col):forme(col) {
+	this->a= coordonne( a,b); 
+	this->b= coordonne( c,d);
+	this->c=coordonne( e,f);
+	
+}
+triangle::triangle(triangle &v):forme(v.couleur){
+	this->a=v.a;
+	this->b=v.b;
+	this->c=v.c;
+	
+}
+triangle triangle:: operator = (triangle &v){
+	this->a=v.a;
+	this->b=v.b;
+	this->c=v.c;
+	this->couleur=v.couleur;
+	return*this;
+}
+void triangle::affiche(){
+	cout<<"le triangle a trois point ";
+	this->a.affiche();this->b.affiche();this->c.affiche();
+	forme::affiche();
+}
+void triangle::deplace(int dx ,int dy){
+	this->a.deplace(dx,dy);
+	this->b.deplace(dx,dy);
+	this->c.deplace(dx,dy);
+	
+}
+int triangle::perimetre(){
+	return sqrt(a.getx()*a.getx()+a.gety()*a.gety())+sqrt(b.getx()*b.getx()+b.gety()*b.gety())+sqrt(c.getx()*c.getx()+c.gety()*c.gety());
+	//sqrt(a.x*a.x+a.y*a.y)+sqrt(b.x*b.x+b.y*b.y)+sqrt(c.x*c.x+c.y*c.y);
+} 
+
+//******************************class de rectangle******************************************************//
+
+class rectangle:public forme
+{
+	protected:
+		coordonne a,b;
+	public:
+	  rectangle(int,int,int,int,short);
+	  rectangle(rectangle &);
+	  rectangle operator = (rectangle &);
+	  void affiche();
+	  void deplace(int ,int);
+	  int surface();
+	  int perimetre();
+};
+rectangle::rectangle(int a,int b,int c,int d,short col):forme(col) {
+	this->a= coordonne( a,b); 
+	this->b= coordonne( c,d);
+	
+	
+}
+rectangle::rectangle(rectangle &v){
+	this->a=v.a;
+	this->b=v.b;
+	
+	this->couleur=v.couleur;
+}
+rectangle rectangle:: operator = (rectangle &v){
+	this->a=v.a;
+	this->b=v.b;
+	
+	this->couleur=v.couleur;
+	return*this;
+}
+void rectangle::affiche(){
+	cout<<"le rectangle a point  ";
+	this->a.affiche();this->b.affiche();
+	forme::affiche();
+}
+void rectangle::deplace(int dx ,int dy){
+	this->a.deplace(dx,dy);
+	this->b.deplace(dx,dy);
+	
+}
+int rectangle::perimetre(){
+	return 2*(abs(b.getx()-a.getx())+abs(b.gety()-a.gety()));
+}
+int rectangle::surface(){
+	return abs(b.getx()-a.getx())*abs(b.gety()-a.gety());
+}
+
+//******************************** la clsse de carre**************************************************//
+  class carre:public rectangle
+{
+	protected:
+		short cote;
+	public:
+	  carre(int,int,short,short);
+	  carre(carre &);
+	  carre operator = (carre &);
+	  void affiche();
+	  void deplace(int ,int);
+	  int surface();
+	  int perimetre();
+};
+carre::carre(int a,int b,short ct,short col):rectangle(a,b,a,b,col) {
+	this->cote=ct;
+}
+carre::carre(carre &v):rectangle(v){
+	this->a=v.a;
+	
+	this->b=v.b;
+	this->cote=v.cote;
+}
+carre carre:: operator = (carre &v){
+	this->a=v.a;
+	this->b=v.b;
+	return*this;
+}
+void carre::affiche(){
+	cout<<"le carre a point  ";
+	this->a.affiche();this->b.affiche();
+	forme::affiche();
+}
+void carre::deplace(int dx ,int dy){
+	this->a.deplace(dx,dy);
+	this->b.deplace(dx,dy);
+	
+}
+int carre::perimetre(){
+	return 4*(abs(b.getx()-a.getx());
+}
+int carre::surface(){
+	return abs(b.getx()-a.getx())*abs(b.gety()-a.gety());
+}
+
+
+main(){
+	//****************************************cercle*********************************************//
+	cout<<"\n ********************* cercle *****************\n";
+	cercle c1(2,2,3,4);
+	c1.affiche();
+	c1.deplace(2,2);
+	cout<<" \n apres le deplacement:\n";
+	c1.affiche();
+	cout<<" \n perimetre : "<<c1.perimetre();
+	cout<<" \n Surface : "<<c1.surface();
+	//***********************triangle********************************************////
+	cout<<"\n *********************triangle*****************\n";
+	triangle t(10,20,30,40,50,50,11);
+	t.affiche();
+	t.deplace(5,4);
+	cout<<" \n apres le deplacement:\n";
+	t.affiche();
+	cout<<" \n perimetre : "<<t.perimetre();
+	//cout<<" \n Surface : "<<t.surface();
+	///***********************rectangle********************************************////
+	cout<<"\n *********************rectangle*****************\n";
+	rectangle R(10,20,30,40,11);
+	R.affiche();
+	R.deplace(5,4);
+	cout<<" \n apres le deplacement:\n";
+	R.affiche();
+	cout<<" \n perimetre : "<<R.perimetre();
+	cout<<" \n Surface : "<<R.surface();
+	///***********************carre************************************************////	
+	cout<<"\n *********************carre*****************\n";
+	carre c(10,20,5,10);
+	c.affiche();
+	cout<<" \n apres le deplacement:\n";
+	c.deplace(5,4);
+	c.affiche();
+	cout<<" \n perimetre : "<<c.perimetre();
+	cout<<" \n Surface : "<<c.surface();
+	getch();
+	
+}
